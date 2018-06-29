@@ -9,7 +9,7 @@ class PWdocx {
 	private $config;
 	private $phpWord;
 
-    function __construct(array $config = null, $fileName) {
+    function __construct($fileName, array $config = null) {
     	$this->config = isset($config) ? $config : config('pwdocx');
 
     	$templatePath = storage_path(array_get($this->config, 'template_option.path', 'template'));
@@ -18,6 +18,8 @@ class PWdocx {
 		$templateFile = $templatePath . '/' . $fileName;
 
 		$this->phpWord = new TemplateProcessor($templateFile);
+
+		return $this;
     }
 
     public function setValues(array $array) {
@@ -27,6 +29,8 @@ class PWdocx {
     	foreach ($array as $key => $value) {
     		$this->phpWord->setValue($prefix . $key . $suffix, $value);
     	}
+
+    	return $this;
     }
 
     public function download($fileName = '') {
