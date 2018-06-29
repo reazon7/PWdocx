@@ -12,7 +12,7 @@ class PWdocx {
     function __construct(array $config = null, $fileName) {
     	$this->config = isset($config) ? $config : config('pwdocx');
 
-    	$templatePath = storage_path($config['template_option']['path']);
+    	$templatePath = storage_path(array_get($this->config, 'template_option.path', 'template'));
 		$this->makePath($templatePath);
 
 		$templateFile = $templatePath . '/' . $fileName;
