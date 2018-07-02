@@ -20,7 +20,7 @@ class PWdocx {
 
     	$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
 
-    	if(!File::exists($templateFile))
+    	if(!\File::exists($templateFile))
     		throw new Exception("Template File Not Found!");
     		
 		$this->phpWord = new TemplateProcessor($templateFile);
