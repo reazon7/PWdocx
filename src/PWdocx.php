@@ -1,7 +1,6 @@
 <?php
 namespace REAZON\PWdocx;
 
-use REAZON\PWdocx\Exceptions\ServiceException;
 use \PhpOffice\PhpWord\TemplateProcessor;
 
 class PWdocx {
@@ -9,14 +8,21 @@ class PWdocx {
 	private $config;
 	private $phpWord;
 
-    function __construct($fileName, array $config = null) {
+    function __construct(array $config = null) {
     	$this->config = isset($config) ? $config : config('pwdocx');
 
+		return $this;
+    }
+
+    public function from($fileName, $parentDir = null) {
     	$templatePath = storage_path(array_get($this->config, 'template_option.path', 'template'));
 		$this->makePath($templatePath);
 
-		$templateFile = $templatePath . '/' . $fileName;
+    	$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
 
+    	if(!File::exists($templateFile))
+    		throw new Exception("Template File Not Found!");
+    		
 		$this->phpWord = new TemplateProcessor($templateFile);
 
 		return $this;
@@ -55,6 +61,17 @@ class PWdocx {
 
 		readfile($resultFile);
 		unlink($resultFile);
+    }
+
+    public function uploadTemplate($uploadName, $fileName = null, $parentDir = null) {
+    	$templatePath = storage_path(array_get($this->config, 'template_option.path', 'template'));
+		$this->makePath($templatePath);
+
+    	$parentDir = isset($parentDir) ? $parentDir : $templatePath;
+    	if(isset($fileName))
+    		Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
+    	else
+    		Storage::putFile($parentDir, request()->file($uploadName));
     }
 
 	private function makePath($path) {
