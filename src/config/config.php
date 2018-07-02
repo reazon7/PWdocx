@@ -4,7 +4,7 @@ return [
 
     'template_option' => [
 
-    	'path' => 'template', // Template location in storage folder
+    	'path' => 'template', // Template location in storage\app folder
 
     ],
 
@@ -17,7 +17,7 @@ return [
 
     'file_option' => [
 
-    	'default_name' => 'Document', // Default document file name if not set
+    	'default_name' => 'Document.docx', // Default document file name if not set
     	'temp_name' => 'document_result', // Temporary document file name
 
     ],

@@ -15,7 +15,7 @@ class PWdocx {
     }
 
     public function from($fileName, $parentDir = null) {
-    	$templatePath = storage_path(array_get($this->config, 'template_option.path', 'template'));
+    	$templatePath = storage_path('app\\' . array_get($this->config, 'template_option.path', 'template'));
 		$this->makePath($templatePath);
 
     	$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
@@ -40,7 +40,7 @@ class PWdocx {
     }
 
     public function download($fileName = '') {
-    	$defaultName = array_get($this->config, 'file_option.default_name', 'Document');
+    	$defaultName = array_get($this->config, 'file_option.default_name', 'Document.docx');
     	$tempName = array_get($this->config, 'file_option.temp_name', '');
 
     	$fileName = empty($fileName) ? $defaultName : $fileName;
@@ -64,14 +64,14 @@ class PWdocx {
     }
 
     public function uploadTemplate($uploadName, $fileName = null, $parentDir = null) {
-    	$templatePath = storage_path(array_get($this->config, 'template_option.path', 'template'));
+    	$templatePath = array_get($this->config, 'template_option.path', 'template');
 		$this->makePath($templatePath);
 
     	$parentDir = isset($parentDir) ? $parentDir : $templatePath;
     	if(isset($fileName))
-    		Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
+    		\Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
     	else
-    		Storage::putFile($parentDir, request()->file($uploadName));
+    		\Storage::putFile($parentDir, request()->file($uploadName));
     }
 
 	private function makePath($path) {
