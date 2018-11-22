@@ -1,21 +1,29 @@
 {
-    "name": "reazon/pwdocx",
-    "description": "PHPWord for my own convenience",
-    "type": "library",
-    "require": {
-        "phpoffice/phpword": "^0.14.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "REAZON\\PWdocx\\": "src/"
-        }
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "REAZON",
-            "email": "reazon7@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable"
+	"name": "reazon/pwdocx",
+	"description": "PHPWord for my own convenience",
+	"type": "library",
+	"require": {
+		"phpoffice/phpword": "^0.14.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"REAZON\\PWdocx\\": "src/"
+		}
+	},
+	"extra": {
+		"laravel": {
+			"providers": [
+				"REAZON\\PWdocx\\PWdocxServiceProvider"
+			],
+			"aliases": {
+				"PWdocx": "REAZON\\PWdocx\\PWdocx"
+			}
+		}
+	},
+	"license": "MIT",
+	"authors": [{
+		"name": "REAZON",
+		"email": "reazon7@gmail.com"
+	}],
+	"minimum-stability": "stable"
 }
