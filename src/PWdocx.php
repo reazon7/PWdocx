@@ -3,49 +3,53 @@ namespace REAZON\PWdocx;
 
 use \PhpOffice\PhpWord\TemplateProcessor;
 
-class PWdocx {
-
+class PWdocx
+{
 	private $config;
 	private $phpWord;
 
-    function __construct(array $config = null) {
-    	$this->config = isset($config) ? $config : config('pwdocx');
+	function __construct(array $config = null)
+	{
+		$this->config = isset($config) ? $config : config('pwdocx');
 
 		return $this;
-    }
+	}
 
-    public function from($fileName, $parentDir = null) {
-    	$templatePath = storage_path('app\\' . array_get($this->config, 'template_option.path', 'template'));
+	public function from($fileName, $parentDir = null)
+	{
+		$templatePath = storage_path('app\\' . array_get($this->config, 'template_option.path', 'template'));
 		$this->makePath($templatePath);
 
-    	$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
+		$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
 
-    	if(!\File::exists($templateFile))
-    		throw new Exception("Template File Not Found!");
-    		
+		if (!\File::exists($templateFile))
+			throw new Exception("Template File Not Found!");
+
 		$this->phpWord = new TemplateProcessor($templateFile);
 
 		return $this;
-    }
+	}
 
-    public function setValues(array $array) {
-    	$prefix = array_get($this->config, 'variable_option.prefix', '');
-    	$suffix = array_get($this->config, 'variable_option.suffix', '');
+	public function setValues(array $array)
+	{
+		$prefix = array_get($this->config, 'variable_option.prefix', '');
+		$suffix = array_get($this->config, 'variable_option.suffix', '');
 
-    	foreach ($array as $key => $value) {
-    		$this->phpWord->setValue($prefix . $key . $suffix, $value);
-    	}
+		foreach ($array as $key => $value) {
+			$this->phpWord->setValue($prefix . $key . $suffix, $value);
+		}
 
-    	return $this;
-    }
+		return $this;
+	}
 
-    public function download($fileName = '') {
-    	$defaultName = array_get($this->config, 'file_option.default_name', 'Document.docx');
-    	$tempName = array_get($this->config, 'file_option.temp_name', '');
+	public function download($fileName = '')
+	{
+		$defaultName = array_get($this->config, 'file_option.default_name', 'Document.docx');
+		$tempName = array_get($this->config, 'file_option.temp_name', '');
 
-    	$fileName = empty($fileName) ? $defaultName : $fileName;
+		$fileName = empty($fileName) ? $defaultName : $fileName;
 
-    	$resultFile = tempnam(sys_get_temp_dir(), $tempName);
+		$resultFile = tempnam(sys_get_temp_dir(), $tempName);
 
 		$this->phpWord->saveAs($resultFile);
 
@@ -61,20 +65,22 @@ class PWdocx {
 
 		readfile($resultFile);
 		unlink($resultFile);
-    }
+	}
 
-    public function uploadTemplate($uploadName, $fileName = null, $parentDir = null) {
-    	$templatePath = array_get($this->config, 'template_option.path', 'template');
+	public function uploadTemplate($uploadName, $fileName = null, $parentDir = null)
+	{
+		$templatePath = array_get($this->config, 'template_option.path', 'template');
 		$this->makePath($templatePath);
 
-    	$parentDir = isset($parentDir) ? $parentDir : $templatePath;
-    	if(isset($fileName))
-    		\Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
-    	else
-    		\Storage::putFile($parentDir, request()->file($uploadName));
-    }
+		$parentDir = isset($parentDir) ? $parentDir : $templatePath;
+		if (isset($fileName))
+			\Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
+		else
+			\Storage::putFile($parentDir, request()->file($uploadName));
+	}
 
-	private function makePath($path) {
+	private function makePath($path)
+	{
 		\File::isDirectory($path) or \File::makeDirectory($path, 0777, true, true);
 	}
 
