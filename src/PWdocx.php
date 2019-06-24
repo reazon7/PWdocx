@@ -1,7 +1,9 @@
 <?php
 namespace REAZON\PWdocx;
 
-use \PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Storage;
+use File;
 
 class PWdocx
 {
@@ -22,7 +24,7 @@ class PWdocx
 
 		$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
 
-		if (!\File::exists($templateFile))
+		if (!File::exists($templateFile))
 			throw new Exception("Template File Not Found!");
 
 		$this->phpWord = new TemplateProcessor($templateFile);
@@ -74,14 +76,13 @@ class PWdocx
 
 		$parentDir = isset($parentDir) ? $parentDir : $templatePath;
 		if (isset($fileName))
-			\Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
+			return Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
 		else
-			\Storage::putFile($parentDir, request()->file($uploadName));
+			return Storage::putFile($parentDir, request()->file($uploadName));
 	}
 
 	private function makePath($path)
 	{
-		\File::isDirectory($path) or \File::makeDirectory($path, 0777, true, true);
+		File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
 	}
-
 }
