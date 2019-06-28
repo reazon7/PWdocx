@@ -19,7 +19,7 @@ class PWdocx
 
 	public function from($fileName, $parentDir = null)
 	{
-		$templatePath = storage_path('app\\' . array_get($this->config, 'template_option.path', 'template'));
+		$templatePath = storage_path('app/' . array_get($this->config, 'template_option.path', 'template'));
 		$this->makePath($templatePath);
 
 		$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
