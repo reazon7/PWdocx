@@ -1,9 +1,11 @@
 <?php
+
 namespace REAZON\PWdocx;
 
-use PhpOffice\PhpWord\TemplateProcessor;
-use Storage;
 use File;
+use Storage;
+use Exception;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class PWdocx
 {
