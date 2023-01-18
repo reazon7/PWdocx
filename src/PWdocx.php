@@ -25,7 +25,7 @@ class PWdocx
 		$templatePath = storage_path('app/' . Arr::get($this->config, 'template_option.path', 'template'));
 		$this->makePath($templatePath);
 
-		$templateFile = (isset($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
+		$templateFile = (!empty($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
 
 		if (!File::exists($templateFile))
 			throw new Exception("Template File Not Found!");
@@ -85,11 +85,21 @@ class PWdocx
 		$templatePath = Arr::get($this->config, 'template_option.path', 'template');
 		$this->makePath($templatePath);
 
-		$parentDir = isset($parentDir) ? $parentDir : $templatePath;
+		$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
 
-		if (isset($fileName)) return Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
+		if (!empty($fileName)) return Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
 
 		return Storage::putFile($parentDir, request()->file($uploadName));
+	}
+
+	public function deleteTemplate(string $fileName, string|null $parentDir = null)
+	{
+		$templatePath = Arr::get($this->config, 'template_option.path', 'template');
+		$this->makePath($templatePath);
+
+		$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
+
+		return Storage::delete(collect([$parentDir, $fileName])->whereNotNull()->join('/'));
 	}
 
 	private function makePath(string $path)
