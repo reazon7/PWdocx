@@ -2,9 +2,12 @@
 
 namespace REAZON\PWdocx\Facades;
 
-use Illuminate\Support\Facades\Facade as BaseFacade;
+use Illuminate\Support\Facades\Facade;
 
-class PWdocx extends BaseFacade
+/**
+ * @method static \REAZON\PWdocx\PWdocxClient from(string $fileName, string $parentDir = null)
+ */
+class PWdocx extends Facade
 {
     /**
      * Get the registered name of the component.

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\TemplateProcessor;
 
-class PWdocx
+class PWdocxClient
 {
 	private array $config;
 	private TemplateProcessor $phpWord;
@@ -20,7 +20,7 @@ class PWdocx
 		return $this;
 	}
 
-	public function from(string $fileName, string $parentDir = null)
+	public function from(string $fileName, string|null $parentDir = null)
 	{
 		$templatePath = storage_path('app/' . Arr::get($this->config, 'template_option.path', 'template'));
 		$this->makePath($templatePath);
@@ -31,6 +31,13 @@ class PWdocx
 			throw new Exception("Template File Not Found!");
 
 		$this->phpWord = new TemplateProcessor($templateFile);
+
+		return $this;
+	}
+
+	public function setValue(string $search, string $replace)
+	{
+		$this->phpWord->setValue($search, $replace);
 
 		return $this;
 	}

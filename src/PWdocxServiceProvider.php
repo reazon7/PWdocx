@@ -28,7 +28,7 @@ class PWdocxServiceProvider extends ServiceProvider
 		$this->mergeConfigFrom(__DIR__ . '/config/config.php', 'pwdocx');
 
 		$this->app->bind('pwdocx', function ($app) {
-			return new PWdocx();
+			return new PWdocxClient();
 		});
 	}
 }
