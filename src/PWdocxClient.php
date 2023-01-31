@@ -109,6 +109,18 @@ class PWdocxClient
 		return false;
 	}
 
+	public function downloadTemplate(string $filename, string|null $name = null, string|null $parentDir = null)
+	{
+		$templatePath = Arr::get($this->config, 'template_option.path', 'template');
+		$this->makePath($templatePath);
+
+		$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
+
+		$name = !empty($name) ? $name . '.' . pathinfo($filename, PATHINFO_EXTENSION) : null;
+
+		return Storage::download("{$parentDir}/{$filename}", $name);
+	}
+
 	public function deleteTemplate(string $fileName, string|null $parentDir = null)
 	{
 		$templatePath = Arr::get($this->config, 'template_option.path', 'template');
