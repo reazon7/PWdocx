@@ -87,16 +87,26 @@ class PWdocxClient
 		unlink($resultFile);
 	}
 
-	public function uploadTemplate(string $uploadName, string|null $fileName = null, string|null $parentDir = null)
+	public function uploadTemplate(string $uploadName, string|null $fileName = null, string|null $parentDir = null, $index = null)
 	{
-		$templatePath = Arr::get($this->config, 'template_option.path', 'template');
-		$this->makePath($templatePath);
+		if (request()->hasFile($uploadName)) {
+			$fileUpload = request()->file($uploadName);
+			if (!empty($index)) $fileUpload = $fileUpload[$index] ?? null;
+			if (empty($fileUpload)) return null;
 
-		$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
+			if ($fileUpload->isValid()) {
+				$templatePath = Arr::get($this->config, 'template_option.path', 'template');
+				$this->makePath($templatePath);
 
-		if (!empty($fileName)) return Storage::putFileAs($parentDir, request()->file($uploadName), $fileName);
+				$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
 
-		return Storage::putFile($parentDir, request()->file($uploadName));
+				if (!empty($fileName)) return Storage::putFileAs($parentDir, $fileUpload, $fileName);
+
+				return Storage::putFile($parentDir, $fileUpload);
+			}
+		}
+
+		return false;
 	}
 
 	public function deleteTemplate(string $fileName, string|null $parentDir = null)
