@@ -92,7 +92,7 @@ class PWdocxClient
 		if (request()->hasFile($uploadName)) {
 			$fileUpload = request()->file($uploadName);
 			if (!empty($index)) $fileUpload = $fileUpload[$index] ?? null;
-			if (empty($fileUpload)) return null;
+			if (empty($fileUpload)) return false;
 
 			if ($fileUpload->isValid()) {
 				$templatePath = Arr::get($this->config, 'template_option.path', 'template');
