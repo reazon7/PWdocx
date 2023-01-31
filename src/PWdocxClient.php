@@ -115,7 +115,6 @@ class PWdocxClient
 		$this->makePath($templatePath);
 
 		$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
-
 		$name = !empty($name) ? $name . '.' . pathinfo($filename, PATHINFO_EXTENSION) : null;
 
 		return Storage::download("{$parentDir}/{$filename}", $name);
