@@ -100,9 +100,9 @@ class PWdocxClient
 
 				$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
 
-				if (!empty($fileName)) return Storage::putFileAs($parentDir, $fileUpload, $fileName);
+				$fileName = $fileName ?? Str::random(40) . '.' . $fileUpload->getClientOriginalExtension();
 
-				return Storage::putFile($parentDir, $fileUpload);
+				return Storage::putFileAs($parentDir, $fileUpload, $fileName);
 			}
 		}
 
