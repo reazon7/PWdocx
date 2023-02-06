@@ -24,7 +24,6 @@ class PWdocxClient
 	public function from(string $fileName, string|null $parentDir = null)
 	{
 		$templatePath = storage_path('app/' . Arr::get($this->config, 'template_option.path', 'template'));
-		$this->makePath($templatePath);
 
 		$templateFile = (!empty($parentDir) ? $parentDir : $templatePath) . '/' . $fileName;
 
@@ -97,7 +96,6 @@ class PWdocxClient
 
 			if ($fileUpload->isValid()) {
 				$templatePath = Arr::get($this->config, 'template_option.path', 'template');
-				$this->makePath($templatePath);
 
 				$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
 
@@ -113,7 +111,6 @@ class PWdocxClient
 	public function downloadTemplate(string $filename, string|null $name = null, string|null $parentDir = null)
 	{
 		$templatePath = Arr::get($this->config, 'template_option.path', 'template');
-		$this->makePath($templatePath);
 
 		$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
 		$name = !empty($name) ? $name . '.' . pathinfo($filename, PATHINFO_EXTENSION) : null;
@@ -124,15 +121,9 @@ class PWdocxClient
 	public function deleteTemplate(string $fileName, string|null $parentDir = null)
 	{
 		$templatePath = Arr::get($this->config, 'template_option.path', 'template');
-		$this->makePath($templatePath);
 
 		$parentDir = !empty($parentDir) ? $parentDir : $templatePath;
 
 		return Storage::delete(collect([$parentDir, $fileName])->whereNotNull()->join('/'));
-	}
-
-	private function makePath(string $path)
-	{
-		File::isDirectory($path) or File::makeDirectory($path);
 	}
 }
