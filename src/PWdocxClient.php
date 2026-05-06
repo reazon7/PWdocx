@@ -74,6 +74,8 @@ class PWdocxClient
 
 		$this->phpWord->saveAs($resultFile);
 
+		ob_end_clean();
+
 		header('Content-Disposition: attachment; filename=' . $fileName);
 		header('Content-Description: File Transfer');
 		header('Content-Transfer-Encoding: binary');
